@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet do Patch 17.3 — TFT Set 17: Space Gods · Árvore de Decisão</title>
+<meta name="description" content="Árvore de decisão para subir de elo no TFT Set 17 (patch 17.3). Cheque seus itens no Round 1 e siga até a comp mais forte.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070912;
+    --panel:rgba(13,16,34,.66);
+    --line:#2c3566;
+    --txt:#eef0ff;
+    --muted:#9aa0d0;
+    --cyan:#5ad9ff;
+    --magenta:#ff5db1;
+    --gold:#ffc24b;
+    --violet:#a07bff;
+    /* tiers */
+    --S:#ff5d73;
+    --A:#ffb454;
+    --B:#5dd0ff;
+    --avoid:#6b7099;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;color:var(--txt);min-height:100vh;
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:
+      radial-gradient(1100px 560px at 50% -8%, rgba(255,140,80,.30) 0%, rgba(255,80,150,.18) 26%, rgba(120,60,200,.16) 46%, rgba(7,9,18,0) 70%),
+      radial-gradient(900px 700px at 85% 12%, rgba(90,120,255,.16) 0%, rgba(7,9,18,0) 60%),
+      radial-gradient(800px 600px at 8% 30%, rgba(90,217,255,.10) 0%, rgba(7,9,18,0) 55%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  /* starfield */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.7;
+    background-image:
+      radial-gradient(1.4px 1.4px at 20% 30%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 70% 20%, #cfe0ff, transparent),
+      radial-gradient(1px 1px at 40% 70%, #fff, transparent),
+      radial-gradient(1.6px 1.6px at 85% 60%, #ffe0f0, transparent),
+      radial-gradient(1px 1px at 15% 80%, #fff, transparent),
+      radial-gradient(1.3px 1.3px at 55% 45%, #d8e6ff, transparent),
+      radial-gradient(1px 1px at 92% 35%, #fff, transparent),
+      radial-gradient(1.1px 1.1px at 33% 12%, #fff, transparent);
+    background-repeat:repeat;background-size:600px 600px;
+  }
+  .stage{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:34px 18px 90px}
+
+  /* ---------- HEADER ---------- */
+  header{text-align:center;margin-bottom:10px}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);
+    font-weight:700;margin:0 0 8px;opacity:.9
+  }
+  h1{
+    font-family:"Cinzel",serif;font-weight:800;margin:0;line-height:1.05;
+    font-size:clamp(30px,6vw,58px);letter-spacing:1px;
+    background:linear-gradient(120deg,#fff 0%,#ffd9b0 30%,#ff8fc4 55%,#9db8ff 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 40px rgba(255,140,200,.18);
+  }
+  h1 .v{display:block;font-size:.42em;letter-spacing:6px;color:var(--gold);
+    -webkit-text-fill-color:var(--gold);margin-top:6px;font-weight:600}
+  .tagline{color:var(--muted);font-size:15px;margin:14px auto 0;max-width:620px;line-height:1.5}
+  .tagline b{color:var(--txt)}
+
+  .legend{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:22px auto 6px}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);font-weight:500}
+  .chip-dot{width:11px;height:11px;border-radius:3px;display:inline-block;box-shadow:0 0 8px currentColor}
+
+  /* ---------- ROOT HUB ---------- */
+  .hub{display:flex;justify-content:center;margin:30px 0 0}
+  .hub-node{
+    position:relative;background:linear-gradient(160deg,#1b1140,#0d1030);
+    border:1.5px solid var(--violet);border-radius:18px;padding:16px 26px;text-align:center;
+    box-shadow:0 0 0 4px rgba(160,123,255,.10), 0 14px 40px rgba(120,60,200,.25);
+  }
+  .hub-node .ic{font-size:22px}
+  .hub-node b{display:block;font-family:"Cinzel",serif;font-size:18px;letter-spacing:1px;margin-top:2px}
+  .hub-node small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+
+  /* connector spine root -> lanes */
+  .spine{height:34px;position:relative}
+  .spine::before{content:"";position:absolute;left:50%;top:0;width:2px;height:18px;background:var(--line);transform:translateX(-50%)}
+
+  /* ---------- LANES ---------- */
+  .lanes{
+    display:grid;gap:18px;
+    grid-template-columns:repeat(5,1fr);
+    align-items:start;
+  }
+  @media(max-width:1080px){ .lanes{grid-template-columns:repeat(2,1fr)} }
+  @media(max-width:560px){ .lanes{grid-template-columns:1fr} }
+
+  .lane{display:flex;flex-direction:column;align-items:center;gap:0}
+
+  /* trigger pill (item / opening) */
+  .trigger{
+    width:100%;text-align:center;border-radius:13px;padding:11px 12px;
+    background:linear-gradient(160deg,rgba(90,217,255,.12),rgba(13,16,34,.4));
+    border:1px solid #2f5e74;position:relative;
+  }
+  .trigger .t-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);font-weight:700}
+  .trigger .t-name{font-weight:800;font-size:15px;margin-top:2px}
+  .trigger .t-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+  .vline{width:2px;height:18px;background:var(--line)}
+
+  /* decision node */
+  .decision{
+    width:100%;text-align:center;background:rgba(20,24,48,.7);border:1px dashed #5b63a0;
+    border-radius:11px;padding:9px 11px;font-size:12.5px;color:#cdd2ff;font-weight:600;
+  }
+  .decision .q{color:var(--gold)}
+
+  /* fork into two outcomes */
+  .fork{display:flex;flex-direction:column;width:100%;gap:0}
+  .branch-label{
+    align-self:center;font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+    padding:3px 11px;border-radius:20px;margin:9px 0 7px;
+  }
+  .yes{background:rgba(90,255,160,.13);color:#7dffb0;border:1px solid #2f7a52}
+  .no{background:rgba(255,120,120,.12);color:#ff9b9b;border:1px solid #7a3f3f}
+  .alt{background:rgba(160,123,255,.14);color:#c9b6ff;border:1px solid #5b4a9a}
+
+  /* ---------- COMP CARD ---------- */
+  .comp{
+    width:100%;border-radius:16px;padding:14px;position:relative;overflow:hidden;
+    background:linear-gradient(165deg,rgba(20,24,52,.92),rgba(10,12,28,.92));
+    border:1.5px solid var(--line);
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  .comp + .comp{margin-top:14px}
+  .comp .glow{position:absolute;inset:0;opacity:.10;pointer-events:none;
+    background:radial-gradient(120px 90px at 80% -10%,currentColor,transparent)}
+  .comp .tier{
+    position:absolute;top:11px;right:11px;width:30px;height:30px;border-radius:9px;
+    display:grid;place-items:center;font-family:"Cinzel",serif;font-weight:800;font-size:15px;
+    color:#0a0c18;box-shadow:0 4px 12px rgba(0,0,0,.4);z-index:2
+  }
+  .portraits{display:flex;gap:-10px;margin-bottom:9px}
+  .portraits img{
+    width:54px;height:54px;border-radius:12px;object-fit:cover;border:2px solid var(--line);
+    background:#11142a;box-shadow:0 4px 12px rgba(0,0,0,.5)
+  }
+  .portraits img + img{margin-left:-12px}
+  .comp h3{margin:0;font-size:16.5px;font-weight:800;letter-spacing:.3px;line-height:1.15;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .comp .desc{font-size:12px;color:#c2c7ee;line-height:1.45;margin:7px 0 0}
+  .traits{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center}
+  .traits img{width:22px;height:22px;filter:drop-shadow(0 0 5px rgba(120,160,255,.5));
+    background:rgba(255,255,255,.06);border-radius:6px;padding:2px}
+  .items{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+  .items b{font-size:10.5px;background:#1a1f44;color:#cdd2ff;padding:4px 8px;border-radius:6px;font-weight:600;border:1px solid #2a3160}
+
+  /* tier accent borders */
+  .t-S{border-color:var(--S);color:var(--S)} .t-S .tier{background:var(--S)}
+  .t-A{border-color:var(--A);color:var(--A)} .t-A .tier{background:var(--A)}
+  .t-B{border-color:var(--B);color:var(--B)} .t-B .tier{background:var(--B)}
+  .comp h3,.comp .desc{color:var(--txt)} .comp .desc{color:#c2c7ee}
+
+  .avoid-card{
+    width:100%;border:1px solid #3a3f63;border-radius:12px;padding:12px;text-align:center;
+    background:rgba(15,17,32,.6);color:var(--avoid);font-size:13px;font-weight:600
+  }
+
+  .uncertain{border-bottom:1.5px dotted var(--gold);cursor:help}
+  .qtag{font-size:9px;color:var(--gold);border:1px solid var(--gold);border-radius:5px;padding:1px 4px;font-weight:700;vertical-align:middle}
+
+  /* ---------- TIP ---------- */
+  .tip{
+    margin:36px auto 0;max-width:920px;border-radius:16px;padding:18px 22px;
+    background:linear-gradient(160deg,rgba(160,123,255,.16),rgba(13,16,34,.6));
+    border:1px solid #5b4a9a;display:flex;gap:14px;align-items:flex-start
+  }
+  .tip .bang{font-size:26px;line-height:1}
+  .tip h4{margin:0 0 5px;font-family:"Cinzel",serif;font-size:16px;letter-spacing:.5px}
+  .tip p{margin:0;font-size:13.5px;color:#d4d8ff;line-height:1.55}
+  .tip b{color:var(--gold)}
+
+  footer{margin:34px auto 0;max-width:920px;text-align:center;color:var(--muted);font-size:11.5px;line-height:1.7}
+  footer b{color:#cdd2ff}
+  footer .src a{color:var(--cyan);text-decoration:none}
+  footer .src a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <header>
+    <p class="kicker">TFT · Set 17 — Space Gods</p>
+    <h1>Pet do Patch <span class="v">ATUALIZAÇÃO 17.3</span></h1>
+    <p class="tagline">No <b>Round 1</b>, cheque seus itens e abertura. Siga a seta até a comp mais forte e suba de elo no automático.</p>
+  </header>
+
+  <div class="legend">
+    <span><i class="chip-dot" style="color:var(--S);background:var(--S)"></i> Tier S</span>
+    <span><i class="chip-dot" style="color:var(--A);background:var(--A)"></i> Tier A</span>
+    <span><i class="chip-dot" style="color:var(--B);background:var(--B)"></i> Condicional</span>
+    <span><i class="chip-dot" style="color:var(--avoid);background:var(--avoid)"></i> Evitar</span>
+    <span><span class="qtag">?</span> nome a confirmar</span>
+  </div>
+
+  <!-- ROOT -->
+  <div class="hub">
+    <div class="hub-node">
+      <div class="ic">🎲</div>
+      <b>ROUND 1</b>
+      <small>Quais seus itens / abertura?</small>
+    </div>
+  </div>
+  <div class="spine"></div>
+
+  <!-- LANES -->
+  <div class="lanes">
+
+    <!-- LANE 1 — AD -->
+    <div class="lane">
+      <div class="trigger">
+        <div class="t-label">Abertura</div>
+        <div class="t-name">Itens AD</div>
+        <div class="t-sub">dano de ataque</div>
+      </div>
+      <div class="vline"></div>
+      <div class="decision"><span class="q">Tem Manaware ou Mira Óptica?</span><br><span style="font-size:11px;color:var(--muted)">(itens psiônicos)</span></div>
+      <div class="fork">
+        <div class="branch-label yes">Sim</div>
+        <div class="comp t-S">
+          <div class="glow"></div><div class="tier">S</div>
+          <div class="portraits">
+            <img src="assets/champions/corki.png" alt="Corki">
+            <img src="assets/champions/riven.png" alt="Riven">
+          </div>
+          <h3>Master <span class="qtag">?</span></h3>
+          <p class="desc">A comp específica do tier topo. Com itens psiônicos certos, é a melhor mão do patch.</p>
+          <div class="traits">
+            <img src="assets/items/trait_meeple.png" title="Meeple">
+            <img src="assets/items/trait_fateweaver.png" title="Fateweaver">
+          </div>
+          <div class="items"><b>Manaware</b><b>Mira Óptica</b></div>
+        </div>
+        <div class="branch-label no">Não</div>
+        <div class="comp t-S">
+          <div class="glow"></div><div class="tier">S</div>
+          <div class="portraits">
+            <img src="assets/champions/corki.png" alt="Corki">
+          </div>
+          <h3>Cork(i)</h3>
+          <p class="desc">Já faz os itens e parte pra cima. Comp de conteste — dispute com 3–4 jogadores.</p>
+          <div class="traits">
+            <img src="assets/items/trait_meeple.png" title="Meeple">
+            <img src="assets/items/trait_fateweaver.png" title="Fateweaver">
+          </div>
+          <div class="items"><b>Último Sussurro</b><b>Lâmina da Morte</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LANE 2 — Vanguardas AP -->
+    <div class="lane">
+      <div class="trigger">
+        <div class="t-label">Abertura</div>
+        <div class="t-name">Vanguardas + AP</div>
+        <div class="t-sub">poder de habilidade</div>
+      </div>
+      <div class="vline"></div>
+      <div class="decision"><span class="q">Consegue rushar nível 9?</span></div>
+      <div class="fork">
+        <div class="branch-label yes">Sim · ideal</div>
+        <div class="comp t-S">
+          <div class="glow"></div><div class="tier">S</div>
+          <div class="portraits">
+            <img src="assets/champions/vex.png" alt="Vex">
+          </div>
+          <h3>Lendárias</h3>
+          <p class="desc">O caminho ideal das vanguardas com AP: rush 9 e jogue de 5-custos lendários.</p>
+          <div class="traits">
+            <img src="assets/items/trait_vanguard.png" title="Vanguard">
+          </div>
+          <div class="items"><b>Nível 9</b><b>5-custos</b></div>
+        </div>
+        <div class="branch-label no">Parou no 8</div>
+        <div class="comp t-A">
+          <div class="glow"></div><div class="tier">A</div>
+          <div class="portraits">
+            <img src="assets/champions/leblanc.png" alt="LeBlanc">
+          </div>
+          <h3>Leck = LeBlanc <span class="qtag">?</span></h3>
+          <p class="desc">Quer uma sinergia <b>Arbiter</b> que a buffe — seja AP ou velocidade de ataque no hit.</p>
+          <div class="traits">
+            <img src="assets/items/trait_arbiter.png" title="Arbiter">
+            <img src="assets/items/trait_vanguard.png" title="Vanguard">
+          </div>
+          <div class="items"><b>Nível 8</b><b>Buff AP / AS on-hit</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LANE 3 — dano bruto -->
+    <div class="lane">
+      <div class="trigger">
+        <div class="t-label">Abertura</div>
+        <div class="t-name">Só dano bruto</div>
+        <div class="t-sub">sem itens completos</div>
+      </div>
+      <div class="vline"></div>
+      <div class="decision"><span class="q">Itens de dano bruto?</span></div>
+      <div class="fork">
+        <div class="branch-label yes">Sim</div>
+        <div class="comp t-A">
+          <div class="glow"></div><div class="tier">A</div>
+          <div class="portraits">
+            <img src="assets/champions/aurelionsol.png" alt="Aurelion Sol">
+          </div>
+          <h3>Aurelion Sol + Vanguardas</h3>
+          <p class="desc">O famoso <b>"AO que não voa"</b>. Vanguardas segurando a frente pro Aurelion Sol carregar.</p>
+          <div class="traits">
+            <img src="assets/items/trait_mecha.png" title="Mecha">
+            <img src="assets/items/trait_vanguard.png" title="Vanguard">
+          </div>
+          <div class="items"><b>Dano bruto</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LANE 4 — Astromante / Lulu -->
+    <div class="lane">
+      <div class="trigger">
+        <div class="t-label">Recurso</div>
+        <div class="t-name">Astromante bom</div>
+        <div class="t-sub">Medalhão / Montanha / Fonte</div>
+      </div>
+      <div class="vline"></div>
+      <div class="decision"><span class="q">Drop de Lulu cedo?</span></div>
+      <div class="fork">
+        <div class="branch-label yes">Sim</div>
+        <div class="comp t-A">
+          <div class="glow"></div><div class="tier">A</div>
+          <div class="portraits">
+            <img src="assets/champions/lulu.png" alt="Lulu">
+          </div>
+          <h3>Lulu Reroll</h3>
+          <p class="desc">Só com astromante bom <b>e</b> Lulu cedo. Slow roll pra 3-estrelar a Lulu.</p>
+          <div class="traits">
+            <img src="assets/items/trait_stargazer.png" title="Stargazer">
+          </div>
+          <div class="items"><b>Reroll nível 6–7</b></div>
+        </div>
+        <div class="branch-label no">Sem isso</div>
+        <div class="avoid-card">⚠️ Evite essa comp</div>
+      </div>
+    </div>
+
+    <!-- LANE 5 — Estrela Negra -->
+    <div class="lane">
+      <div class="trigger">
+        <div class="t-label">Vertente</div>
+        <div class="t-name">Estrela Negra</div>
+        <div class="t-sub">Dark Star</div>
+      </div>
+      <div class="vline"></div>
+      <div class="decision"><span class="q">Qual seu gatilho?</span></div>
+      <div class="fork">
+        <div class="branch-label alt">Tem emblema</div>
+        <div class="comp t-A">
+          <div class="glow"></div><div class="tier">A</div>
+          <div class="portraits">
+            <img src="assets/champions/jhin.png" alt="Jhin">
+            <img src="assets/champions/karma.png" alt="Karma">
+          </div>
+          <h3>Hard Force</h3>
+          <p class="desc">Com emblema de Estrela Negra na mão, pode forçar a comp com tranquilidade.</p>
+          <div class="traits">
+            <img src="assets/items/trait_darkstar.png" title="Dark Star">
+          </div>
+          <div class="items"><b>Emblema Estrela Negra</b></div>
+        </div>
+        <div class="branch-label alt">Cópias + Cho'Gath</div>
+        <div class="comp t-B">
+          <div class="glow"></div><div class="tier">B</div>
+          <div class="portraits">
+            <img src="assets/champions/lissandra.png" alt="Lissandra">
+            <img src="assets/champions/chogath.png" alt="Cho'Gath">
+          </div>
+          <h3>Cogitarra Reroll <span class="qtag">?</span></h3>
+          <p class="desc">Com muitas cópias dela cedo, junto do Cho'Gath. Reroll de baixo custo.</p>
+          <div class="traits">
+            <img src="assets/items/trait_darkstar.png" title="Dark Star">
+          </div>
+          <div class="items"><b>Reroll</b><b>Cho'Gath</b></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TIP -->
+  <div class="tip">
+    <div class="bang">⚠️</div>
+    <div>
+      <h4>Regra de conteste</h4>
+      <p>Se o cenário tiver muita disputa pela mesma comp (ex.: <b>Cork</b> ou <b>Master</b>), priorize
+      <b>aprimoramentos de economia</b> ou <b>loss streak</b> em vez de montar campo forte desde cedo.
+      Pega o pet quando a poeira baixar.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>Baseado em guia de patch (transcrição de vídeo) · meta do <b>Set 17 · 17.3</b>. Imagens: Riot Games / Community Dragon.<br>
+    <b>A confirmar:</b> a comp exata de "Master", a identidade de "Cogitarra" (Lissandra?) e o item "Mira Óptica".
+    "Herou" = <b>reroll</b> · "Shogar" = <b>Cho'Gath</b> · "Árbitro" = trait <b>Arbiter</b>.</p>
+    <p class="src">Fontes de meta: <a href="https://tftacademy.com/tierlist/comps">TFT Academy</a> · <a href="https://www.metatft.com/comps">MetaTFT</a></p>
+  </footer>
+
+</div>
+</body>
+</html>
